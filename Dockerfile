@@ -9,7 +9,7 @@ RUN go mod download
 
 
 COPY . ./
-RUN go build -o ./bin/app cmd/weatherapp/main.go
+RUN go build -o ./bin/app cmd/main.go
 
 
 FROM alpine as runner
