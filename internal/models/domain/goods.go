@@ -3,6 +3,6 @@ package domain
 type Goods struct {
 	ID       int
 	Name     string
-	Price    float32
+	Price    string
 	Category int
 }
