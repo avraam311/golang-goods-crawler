@@ -1,4 +1,4 @@
-FROM golang:1.22.4-alpine AS build_base
+FROM golang:1.24.2-alpine AS build_base
 
 RUN apk --no-cache add bash git make gcc gettext musl-dev
 
@@ -9,10 +9,10 @@ RUN go mod download
 
 
 COPY . ./
-RUN go build -o ./bin/app cmd/main.go
+RUN go build -o ./bin/app cmd/crawlerapp/main.go
 
 
-FROM alpine as runner
+FROM alpine AS runner
 
 COPY --from=build_base /usr/local/src/bin/app /
 COPY ./.env /

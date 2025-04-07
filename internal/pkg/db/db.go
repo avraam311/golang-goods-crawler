@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/yngk19/weatherapp/internal/config"
+	"github.com/avraam311/golang-goods-crawler/internal/config"
 )
 
 func ConnectDB(ctx context.Context, cfg config.DBConfig) (*pgxpool.Pool, error) {

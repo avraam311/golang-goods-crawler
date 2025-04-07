@@ -1,0 +1,4 @@
+CREATE TABLE goods (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(300) NOT NULL
+);

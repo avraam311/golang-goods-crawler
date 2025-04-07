@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
@@ -12,17 +13,17 @@ import (
 type Config struct {
 	ServerConfig
 	DBConfig
-	OpenWeatherAPIKey string
+	LogFilePath       string
 }
 
 type ServerConfig struct {
-	Env        string `yaml:"env" env-default:"prod"`
+	Env        string `yaml:"env" env-default:"local"`
 	HTTPServer `yaml:"http_server"`
 }
 
 type DBConfig struct {
 	Host           string
-	Port           string
+	Port           uint16
 	User           string
 	Password       string
 	SSLMode        string
@@ -43,9 +44,13 @@ func MustLoad() *Config {
 		log.Fatalf("Cannot load the .env file!: %s", err)
 	}
 	configPath := os.Getenv("CONFIG_PATH")
-	OpenWeatherAPIKey := os.Getenv("OPENWEATHER_KEY")
+	logFilePath := os.Getenv("LOG_FILE_PATH")
 	dbHost := os.Getenv("POSTGRES_HOST")
-	dbPort := os.Getenv("POSTGRES_PORT")
+	dbPortString := os.Getenv("POSTGRES_PORT")
+	dbPort, err := strconv.Atoi(dbPortString)
+	if err != nil {
+		log.Fatalln(err)
+	}
 	dbName := os.Getenv("POSTGRES_DB")
 	dbUser := os.Getenv("POSTGRES_USER")
 	dbPassword := os.Getenv("POSTGRES_PASSWORD")
@@ -53,7 +58,7 @@ func MustLoad() *Config {
 	dbMigrationsPath := os.Getenv("MIGRATIONS_PATH")
 	var db DBConfig = DBConfig{
 		Host:           dbHost,
-		Port:           dbPort,
+		Port:           uint16(dbPort),
 		User:           dbUser,
 		Password:       dbPassword,
 		SSLMode:        dbSSLMode,
@@ -73,7 +78,7 @@ func MustLoad() *Config {
 	var cfg Config = Config{
 		DBConfig:          db,
 		ServerConfig:      srv,
-		OpenWeatherAPIKey: OpenWeatherAPIKey,
+		LogFilePath:       logFilePath,
 	}
 	return &cfg
 }
